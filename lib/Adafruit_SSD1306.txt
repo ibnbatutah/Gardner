@@ -1,0 +1,6 @@
+Install Adafruit_SSD1306 and Adafruit_GFX libraries via PlatformIO Library Manager:
+
+1. Open PlatformIO Home (house icon in VS Code sidebar)
+2. Go to Libraries
+3. Search for "Adafruit SSD1306" and "Adafruit GFX"
+4. Click "Add to Project" for each

@@ -1,0 +1,12 @@
+# WiFiManager for ESP32
+
+Add this to your platformio.ini:
+library = tzapu/WiFiManager@^2.0.11
+
+Usage:
+- WiFiManager automatically starts a configuration portal if WiFi is not set or connection fails.
+- Connect to the ESP32 AP (e.g., "AutoConnectAP") and open 192.168.4.1 in a browser.
+- Enter WiFi credentials and save.
+- ESP32 will reboot and connect to the configured WiFi.
+
+See https://github.com/tzapu/WiFiManager for details.
