@@ -17,6 +17,8 @@
 #define TFT_MOSI 6 // SDA (SPI data)
 #define I2C_SDA 18
 #define I2C_SCL 19
+#define OC_TEAL    0x6EFD
+#define OC_LIGHT   0x7F1E
 
 // Timer durations (ms)
 unsigned long ledOnDuration = 5000;   // Default: 5s ON
@@ -58,13 +60,14 @@ void setup()
     digitalWrite(PUMP_PIN, HIGH);
     Wire.begin(I2C_SDA, I2C_SCL);
     tft.initR(INITR_GREENTAB); // Most ST7735S modules use BLACKTAB
+    tft.invertDisplay(1);
     tft.setRotation(1);
-    tft.fillScreen(ST77XX_WHITE);
+    tft.fillScreen(ST77XX_BLACK);
     // Draw logo centered (128x128 logo, display is 160x128)
     tft.drawRGBBitmap(16, 0, openchain_logo, 128, 128);
     delay(1500);
-    tft.fillScreen(ST77XX_WHITE);
-    tft.setTextColor(ST77XX_BLACK, ST77XX_WHITE);
+    tft.fillScreen(ST77XX_BLACK);
+    tft.setTextColor(OC_TEAL, ST77XX_BLACK);
     tft.setTextSize(1);
     tft.setCursor(10, 30);
     tft.println("Hello Gardner!");
@@ -106,8 +109,8 @@ void setup()
     delay(1000);
 
     // Show WiFi setup instructions if needed
-    tft.fillScreen(ST77XX_WHITE);
-    tft.setTextColor(ST77XX_BLACK, ST77XX_WHITE);
+    tft.fillScreen(ST77XX_BLACK);
+    tft.setTextColor(OC_TEAL, ST77XX_BLACK);
     tft.setTextSize(1);
     tft.setCursor(10, 30);
     tft.println("Checking WiFi...");
@@ -123,7 +126,7 @@ void setup()
     Serial.println(WiFi.status());
     
     // Update display based on connection status
-    tft.fillScreen(ST77XX_WHITE);
+    tft.fillScreen(ST7735_BLACK);
     tft.setCursor(10, 30);
     if (WiFi.status() == WL_CONNECTED) {
         tft.println("WiFi Connected!");
@@ -201,7 +204,7 @@ void loop()
         static bool bOnce = false;
         if (!bOnce)
         {
-            tft.fillScreen(ST77XX_WHITE);
+            tft.fillScreen(ST77XX_BLACK);
             bOnce = true;
         }
         tft.setTextSize(1);
@@ -224,9 +227,9 @@ void loop()
                 lastValid = true;
             }
             // Only clear the region where text is drawn to reduce flicker
-            tft.fillRect(0, 40, 160, 60, ST77XX_WHITE);
+            tft.fillRect(0, 40, 160, 60, ST77XX_BLACK);
             tft.setTextSize(1);
-            tft.setTextColor(ST77XX_BLACK, ST77XX_WHITE);
+            tft.setTextColor(OC_TEAL, ST77XX_BLACK);
             if (lastValid)
             {
                 tft.setCursor(10, 30);
@@ -250,8 +253,10 @@ void loop()
             }
             // Show output status for LED and PUMP
             tft.setCursor(10, 60);
+            tft.setTextColor(ST7735_YELLOW, ST77XX_BLACK);
             tft.print("LED: ");
             tft.print(digitalRead(LED_PIN) == HIGH ? "OFF" : "ON");
+            tft.setCursor(60, 60);
             tft.print(" | ");
             tft.print("PUMP: ");
             tft.print(digitalRead(PUMP_PIN) == HIGH ? "OFF" : "ON");
@@ -259,6 +264,7 @@ void loop()
                 // ...existing code...
             // Show IP address if connected
             tft.setCursor(10, 90);
+            tft.setTextColor(OC_LIGHT, ST77XX_BLACK);
             if (WiFi.status() == WL_CONNECTED) {
                 tft.print("IP: ");
                 tft.print(WiFi.localIP());
